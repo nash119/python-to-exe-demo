@@ -2,24 +2,31 @@ name: Build EXE
 
 on:
   push:
-    branches: [ "main" ]   # 推送到 main 分支时触发
+    branches: [ "main" ]
 
 jobs:
   build:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4   # 这里也更新成 v4
+      - uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v5   # Python setup 也有新版本
+        uses: actions/setup-python@v5
         with:
           python-version: '3.12.7'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt || echo "no requirements.txt"
 
       - name: Install PyInstaller
         run: pip install pyinstaller
 
       - name: Build EXE
-        run: pyinstaller --onefile main.py   # 改成你的文件名
+        run: pyinstaller --onefile main.py
+
+      - name: List dist files
+        run: dir dist
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
