@@ -2,27 +2,27 @@ name: Build EXE
 
 on:
   push:
-    branches: [ "main" ]   # 只要推送到 main 分支就触发
+    branches: [ "main" ]   # 推送到 main 分支时触发
 
 jobs:
   build:
-    runs-on: windows-latest   # 关键：在 Windows 云环境执行
+    runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4   # 这里也更新成 v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5   # Python setup 也有新版本
         with:
-          python-version: '3.12.7'   # 你项目用的版本
+          python-version: '3.12.7'
 
       - name: Install PyInstaller
         run: pip install pyinstaller
 
       - name: Build EXE
-        run: pyinstaller --onefile main.py   # 把 main.py 打包成 exe
+        run: pyinstaller --onefile main.py   # 改成你的文件名
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: exe-output
           path: dist/*
